@@ -1,0 +1,31 @@
+#main-container {
+    display:flex;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    font-size: 50px;
+    padding: 40px;
+}
+
+#board {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 1em;
+    column-gap: 1em;
+    height: 500px;
+    width: 500px;
+    background-color: bisque;
+    margin: 0 auto;
+    padding: 1em;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightcyan;
+    font-size: 50px;
+}
