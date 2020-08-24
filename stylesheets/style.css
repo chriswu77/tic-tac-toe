@@ -1,3 +1,19 @@
+#body-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#player-form {
+    display: flex;
+    flex-direction: column;
+    margin-left: 50px;
+}
+
+#player-x, #player-o {
+    display: flex;
+}
+
 #main-container {
     display:flex;
     flex-direction: column;
@@ -29,3 +45,4 @@ h1 {
     background-color: lightcyan;
     font-size: 50px;
 }
+
