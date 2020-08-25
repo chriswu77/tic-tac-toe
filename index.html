@@ -7,35 +7,51 @@
         <link href='stylesheets/style.css' rel='stylesheet'>
     </head>
     <body>
-        <div id='body-container'>
-            <div id='main-container'>
-                <h1>Tic-Tac-Toe</h1>
-                <div id='board'>
-                    <div id='box0' class='box'>X</div>
-                    <div id='box1' class='box'>X</div>
-                    <div id='box2' class='box'>X</div>
-                    <div id='box3' class='box'>X</div>
-                    <div id='box4' class='box'>X</div>
-                    <div id='box5' class='box'>X</div>
-                    <div id='box6' class='box'>X</div>
-                    <div id='box7' class='box'>X</div>
-                    <div id='box8' class='box'>X</div>
+        <div id='main-container'>
+            <h1>Tic-Tac-Toe</h1>
+            <div id='player-name-display'>
+                <div class='player-card' id='player-card-1'>
+                    <p class='player-text'>Player 1</p>
+                    <p class='player-name'>Chris</p>
+                </div>
+                <div class='player-card' id='player-card-2'>
+                    <p class='player-text'>Player 2</p>
+                    <p class='player-name'>Ruby</p>
                 </div>
             </div>
-            <form id='player-form'>
-                <p>Enter Player Names:</p>
-                <div id='player-x'>
-                    <label>Player X</label>
-                    <input id='player-x-name' type='text' required>
-                </div>
-                <div id='player-o'>
-                    <label>Player O</label>
-                    <input id='player-o-name' type='text' required>
-                </div>
-                <input type='submit' value='Submit'>
-            </form>
+            <div id='board'>
+                <div id='box0' class='box'></div>
+                <div id='box1' class='box'></div>
+                <div id='box2' class='box'></div>
+                <div id='box3' class='box'></div>
+                <div id='box4' class='box'></div>
+                <div id='box5' class='box'></div>
+                <div id='box6' class='box'></div>
+                <div id='box7' class='box'></div>
+                <div id='box8' class='box'></div>
+            </div>
         </div>
-
+        <form id='player-form'>
+            <p>Enter Player Names:</p>
+            <div id='player-x'>
+                <label>Player X</label>
+                <input id='player-x-name' type='text' required>
+            </div>
+            <div id='player-o'>
+                <label>Player O</label>
+                <input id='player-o-name' type='text' required>
+            </div>
+            <input type='submit' value='Submit'>
+        </form>
+        <div class='turn-bubble' id='player-1-bubble'>
+            <p>Your</p>
+            <p>Turn</p>
+        </div>
+        <div class='turn-bubble' id='player-2-bubble'>
+            <p>Your</p>
+            <p>Turn</p>
+        </div>
+        <button id='restart-btn'>Restart</button>
         <script src='script.js'></script>
     </body>
 </html>

@@ -72,6 +72,10 @@ const gameBoard = (function (){
             } else {
                 return false;
             }
+        },
+
+        getBoard: function () {
+            return board;
         }
 
     }
@@ -80,11 +84,37 @@ const gameBoard = (function (){
 
 const UIController = (function () {
     // use this module to control the display 
+    const cellDOMs = Array.from(document.querySelectorAll('.box'));
+    const playerOneBubble = document.querySelector('#player-1-bubble');
+    const playerTwoBubble = document.querySelector('#player-2-bubble');
 
-    // return {
+    const setLetterStyle = function (letter, cell) {
+        if (letter === 'X') {
+            cell.classList.add('player-1-color');
+        } else if (letter === 'O') {
+            cell.classList.add('player-2-color');
+        }
+    };
 
-    //     }
-    
+    return {
+        renderMove: function (board) {
+            for (let i = 0; i < cellDOMs.length; i++) {
+                cellDOMs[i].textContent = board[i];
+                setLetterStyle(board[i], cellDOMs[i]);
+            }
+        },
+
+        toggleBubble: function (letter) {
+            if (letter === 'X') {
+                playerOneBubble.style.visibility = 'visible';
+                playerTwoBubble.style.visibility = 'hidden';
+            } else {
+                playerTwoBubble.style.visibility = 'visible';
+                playerOneBubble.style.visibility = 'hidden';
+            }
+        }
+    }
+
 })();
 
 const gameController = (function () {
@@ -98,6 +128,11 @@ const gameController = (function () {
     const setupEventListeners = () => {
         document.addEventListener('click', clickCell);
         document.querySelector('#player-form').addEventListener('submit', assignPlayer);
+        document.getElementById('restart-btn').addEventListener('click', restart);
+    }
+
+    function restart() {
+        
     }
 
     function clickCell (e) {
@@ -128,6 +163,9 @@ const gameController = (function () {
         if (isEmpty) {
             gameBoard.insertInBoard(player.letter, cellIndex);
             gameBoard.insertInData(player, cellIndex);
+            // render the board to the UI
+            UIController.renderMove(gameBoard.getBoard());
+            UIController.toggleBubble(player.letter);
             gameOver(player);
             // checkForWinner(player);
             // checkForDraw(player);
@@ -148,22 +186,6 @@ const gameController = (function () {
             gamePlaying = false;
         }
     }
-
-    // function checkForWinner (player) {
-    //     // loop through arrays for player X and O 
-    //     const outcome = player.checkIfWin();
-    //     console.log(outcome);
-    //     // if win don't allow anymore turns
-    //     if (outcome.decision) {
-    //         gamePlaying = false;
-    //     }
-    // }
-
-    // function checkForDraw (player) {
-    //     if (player.checkIfDraw) {
-    //         gamePlaying = false;
-    //     }
-    // }
 
     function assignPlayer (e) {
         e.preventDefault();

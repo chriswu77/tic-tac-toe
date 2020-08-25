@@ -1,13 +1,14 @@
-#body-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+body {
+    position: relative;
 }
 
 #player-form {
     display: flex;
     flex-direction: column;
-    margin-left: 50px;
+    /* margin-left: 50px; */
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
 #player-x, #player-o {
@@ -22,7 +23,7 @@
 h1 {
     text-align: center;
     font-size: 50px;
-    padding: 40px;
+    padding: 30px;
 }
 
 #board {
@@ -46,3 +47,71 @@ h1 {
     font-size: 50px;
 }
 
+#player-name-display {
+    display: flex;
+    /* padding: 16px; */
+    padding: 0 16px;
+    width: 500px;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+
+.player-card {
+    display: flex;
+    flex-direction: column;
+    font-size: 30px;
+}
+
+.player-text, .player-name {
+    margin-bottom: 15px;
+}
+
+#player-card-1 {
+    color: red;
+}
+
+#player-card-2 {
+    color: blue;
+    text-align: right;
+}
+
+.turn-bubble {
+    position: absolute;
+    top: 50px;
+    font-size: 25px;
+    border: 1px solid black;
+    padding: 20px;
+    border-radius: 50%;
+}
+
+#player-1-bubble {
+    left: 370px;
+    visibility: hidden;
+}
+
+#player-2-bubble {
+    right: 370px;
+    visibility: hidden;
+}
+
+#restart-btn {
+    position: absolute;
+    top: 250px;
+    right: 300px;
+    font-size: 30px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: pink;
+}
+
+.player-1-color {
+    color: red;
+}
+
+.player-2-color {
+    color: blue;
+}
+
+/* .toggle-bubble {
+    visibility: visible;
+} */
