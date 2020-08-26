@@ -115,3 +115,7 @@ h1 {
 /* .toggle-bubble {
     visibility: visible;
 } */
+
+.highlight {
+    background-color: greenyellow;
+}
