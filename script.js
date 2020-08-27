@@ -97,10 +97,13 @@ const gameBoard = (function (){
 const UIController = (function () {
     // use this module to control the display 
     const cellDOMs = Array.from(document.querySelectorAll('.box'));
-    const playerOneBubble = document.querySelector('#player-1-bubble');
-    const playerTwoBubble = document.querySelector('#player-2-bubble');
+    const playerOneDot = document.querySelector('.player-one-dot');
+    const playerTwoDot = document.querySelector('.player-two-dot');
     const playerOneName = document.getElementById('player-1-name');
     const playerTwoName = document.getElementById('player-2-name');
+    const drawText = document.getElementById('draw-text');
+    const winnerOne = document.getElementById('winner-1');
+    const winnerTwo = document.getElementById('winner-2');
 
     const setLetterStyle = function (letter, cell) {
         if (letter === 'X') {
@@ -121,36 +124,23 @@ const UIController = (function () {
     const setPlayerNames = (player1, player2) => {
         playerOneName.textContent = player1.name;
         playerTwoName.textContent = player2.name;
-        firstPlayerBubble();
+        firstPlayerDot();
     };
 
-    const firstPlayerBubble = () => {
-        playerOneBubble.style.visibility = 'visible';
-        playerTwoBubble.style.visibility = 'hidden';
+    const firstPlayerDot = () => {
+        playerOneDot.style.visibility = 'visible';
+        playerTwoDot.style.visibility = 'hidden';
     };
 
-    // const resetLetterStyle = () => {
-    //     cellDOMs.forEach(cell => {
-    //         cell.classList.remove('player-1-color');
-    //         cell.classList.remove('player-2-color');
-    //     });
-    // };
-
-    const toggleBubble = letter => {
+    const toggleDot = letter => {
         if (letter === 'X') {
-            playerTwoBubble.style.visibility = 'visible';
-            playerOneBubble.style.visibility = 'hidden';
-
+            playerTwoDot.style.visibility = 'visible';
+            playerOneDot.style.visibility = 'hidden';
         } else {
-            playerOneBubble.style.visibility = 'visible';
-            playerTwoBubble.style.visibility = 'hidden';
+            playerOneDot.style.visibility = 'visible';
+            playerTwoDot.style.visibility = 'hidden';
         }
     };
-
-    // const hideBubble = () => {
-    //     playerOneBubble.style.visibility = 'hidden';
-    //     playerTwoBubble.style.visibility = 'hidden';
-    // };
 
     const highlightWin = winningCombo => {
         winningCombo.forEach(index => {
@@ -167,15 +157,41 @@ const UIController = (function () {
         });
     };
 
+    const showDraw = () => {
+        drawText.textContent = 'DRAW';
+        playerOneDot.style.visibility = 'hidden';
+        playerTwoDot.style.visibility = 'hidden';
+    }
+
+    const hideDraw = () => {
+        drawText.textContent = '';
+    };
+
+    const setWinner = letter => {
+        if (letter === 'X') {
+            winnerOne.textContent = 'WINNER';
+        } else {
+            winnerTwo.textContent = 'WINNER';
+        }
+    };
+
+    const resetPlayers = () => {
+        winnerOne.textContent = 'Player 1';
+        winnerTwo.textContent = 'Player 2';
+        firstPlayerDot();
+    };
+
     return {
         renderMove,
         setPlayerNames,
-        firstPlayerBubble,
-        // resetLetterStyle,
-        toggleBubble,
-        // hideBubble,
+        firstPlayerDot,
+        toggleDot,
         highlightWin,
-        clearBoard
+        clearBoard,
+        showDraw,
+        hideDraw,
+        setWinner,
+        resetPlayers
     }
 })();
 
@@ -204,10 +220,9 @@ const gameController = (function () {
         gamePlaying = true;
         // reset the UI
         UIController.clearBoard();
-        // UIController.hideBubble();
-
-        UIController.firstPlayerBubble();
-        // UIController.resetLetterStyle();
+        UIController.resetPlayers();
+        // UIController.firstPlayerDot();
+        UIController.hideDraw();
     };
 
     const pushData = (player, cellIndex) => {
@@ -215,24 +230,26 @@ const gameController = (function () {
         gameBoard.insertInData(player, cellIndex);
         // render the board to the UI
         UIController.renderMove(gameBoard.getBoard());
-        UIController.toggleBubble(player.letter);
+        // UIController.toggleDot(player.letter);
     };      
 
     const gameOver = player => {
-        // loop through array for player X or O 
         const win = player.checkIfWin();
         const draw = player.checkIfDraw();
-
         console.log(win);
         console.log(draw);
         // if win or draw don't allow anymore turns
         if (win.decision) {
             gamePlaying = false;
+            // set winner name and keep dot on winner
+            UIController.setWinner(player.letter);
             // highlight board UI for winning combo
             UIController.highlightWin(win.winningIndex);
-        } 
-        if (draw) {
+        } else if (draw) {
             gamePlaying = false;
+            UIController.showDraw();
+        } else {
+            UIController.toggleDot(player.letter);
         }
     };
 
@@ -271,6 +288,7 @@ const gameController = (function () {
             playerX = gameBoard.addPlayer(playerXName, 'X');
             playerO = gameBoard.addPlayer(playerOName, 'O');
             UIController.setPlayerNames(playerX, playerO);
+            document.querySelector('#player-form').reset();
         }
     };
 

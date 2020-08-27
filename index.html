@@ -5,17 +5,25 @@
         <title>Tic-Tac-Toe</title>
         <link href='stylesheets/reset.css' rel='stylesheet'>
         <link href='stylesheets/style.css' rel='stylesheet'>
+        <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Monoton&display=swap" rel="stylesheet"> 
     </head>
     <body>
         <div id='main-container'>
             <h1>Tic-Tac-Toe</h1>
             <div id='player-name-display'>
                 <div class='player-card' id='player-card-1'>
-                    <p class='player-text'>Player 1</p>
+                    <div id='player-1-status'>
+                        <p class='player-text' id='winner-1'>Player 1</p>
+                        <div class='player-one-dot'></div>
+                    </div>
                     <p class='player-name' id='player-1-name'>Chris</p>
                 </div>
+                <div id='draw-text'></div>
                 <div class='player-card' id='player-card-2'>
-                    <p class='player-text'>Player 2</p>
+                    <div id='player-2-status'>
+                        <p class='player-text' id='winner-2'>Player 2</p>
+                        <div class='player-two-dot'></div>
+                    </div>
                     <p class='player-name' id='player-2-name'>Ruby</p>
                 </div>
             </div>
@@ -29,6 +37,7 @@
                 <div id='box6' class='box'></div>
                 <div id='box7' class='box'></div>
                 <div id='box8' class='box'></div>
+                <button id='restart-btn'>Restart</button>
             </div>
         </div>
         <form id='player-form'>
@@ -43,15 +52,7 @@
             </div>
             <input type='submit' value='Submit'>
         </form>
-        <div class='turn-bubble' id='player-1-bubble'>
-            <p>Your</p>
-            <p>Turn</p>
-        </div>
-        <div class='turn-bubble' id='player-2-bubble'>
-            <p>Your</p>
-            <p>Turn</p>
-        </div>
-        <button id='restart-btn'>Restart</button>
+
         <script src='script.js'></script>
     </body>
 </html>

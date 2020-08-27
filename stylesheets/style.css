@@ -1,5 +1,6 @@
 body {
     position: relative;
+    background-image: url(../images/brickwall_rc.jpg);
 }
 
 #player-form {
@@ -21,9 +22,11 @@ body {
 }
 
 h1 {
+    font-family: 'Monoton', cursive;
     text-align: center;
     font-size: 50px;
-    padding: 30px;
+    padding: 50px;
+    color: #FFFFFF;
 }
 
 #board {
@@ -37,6 +40,7 @@ h1 {
     background-color: bisque;
     margin: 0 auto;
     padding: 1em;
+    position: relative;
 }
 
 .box {
@@ -48,18 +52,25 @@ h1 {
 }
 
 #player-name-display {
+    font-family: 'Bungee', cursive;
     display: flex;
     /* padding: 16px; */
     padding: 0 16px;
-    width: 500px;
+    width: 1000px;
     margin: 0 auto;
     justify-content: space-between;
+}
+
+#draw-text {
+    font-size: 40px;
+    color: #FFFFFF;
+    padding-top: 20px;
 }
 
 .player-card {
     display: flex;
     flex-direction: column;
-    font-size: 30px;
+    font-size: 35px;
 }
 
 .player-text, .player-name {
@@ -67,55 +78,60 @@ h1 {
 }
 
 #player-card-1 {
-    color: red;
+    color: #29ABF4;
+    position: relative;
 }
 
 #player-card-2 {
-    color: blue;
+    color: #F76BE9;
     text-align: right;
 }
 
-.turn-bubble {
-    position: absolute;
-    top: 50px;
-    font-size: 25px;
-    border: 1px solid black;
-    padding: 20px;
-    border-radius: 50%;
-}
-
-#player-1-bubble {
-    left: 370px;
-    visibility: hidden;
-}
-
-#player-2-bubble {
-    right: 370px;
-    visibility: hidden;
-}
-
 #restart-btn {
+    font-family: 'Bungee', cursive;
     position: absolute;
-    top: 250px;
-    right: 300px;
-    font-size: 30px;
+    font-size: 35px;
     padding: 10px;
-    border-radius: 10px;
-    background-color: pink;
+    border-radius: 5px;
+    background-color: #EBEF1E;
+    color: #7AAE09;
+    right: -300px;
+    top: 230px;
 }
 
 .player-1-color {
-    color: red;
+    color: #29ABF4;
 }
 
 .player-2-color {
-    color: blue;
+    color: #F76BE9;
 }
-
-/* .toggle-bubble {
-    visibility: visible;
-} */
 
 .highlight {
     background-color: greenyellow;
+}
+
+#player-1-status, #player-2-status {
+    position: relative;
+}
+
+.player-one-dot, .player-two-dot {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    visibility: hidden;
+}
+
+.player-one-dot {
+    background-color: #29ABF4;
+    left: -35px;
+    top: 7px;
+}
+
+.player-two-dot {
+    background-color: #F76BE9;
+    top: 7px;
+    right: -35px;
 }
