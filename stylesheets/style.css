@@ -1,24 +1,14 @@
 body {
     position: relative;
     background-image: url(../images/brickwall_rc.jpg);
-}
-
-#player-form {
-    display: flex;
-    flex-direction: column;
-    /* margin-left: 50px; */
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
-
-#player-x, #player-o {
-    display: flex;
+    background-repeat: repeat-y;
+    background-size: 100% 100%;
 }
 
 #main-container {
     display:flex;
     flex-direction: column;
+    z-index: 1;
 }
 
 h1 {
@@ -112,8 +102,8 @@ h1 {
     font-size: 35px;
     padding: 10px;
     border-radius: 5px;
-    background-color: #EBEF1E;
-    color: #7AAE09;
+    background-color: #E8F83A;
+    color: #34A02B;
     right: -300px;
     top: 230px;
 }
@@ -155,20 +145,111 @@ h1 {
     right: -35px;
 }
 
-svg  {
+img {
     max-width: 100%;
     max-height: 100%;
+}
+
+.modal {
+    font-family: 'Bungee', cursive;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    /* visibility: hidden;
+    opacity: 0;
+    transition: all 0.2s ease-in; */
+}
+
+.modal-content {
     box-sizing: border-box;
+    background-color: #FFFFFF;
+    /* width: 50%; */
+    padding: 50px;
+    position: relative;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
 }
 
-.edit-path {
-    transform: translate(-50px, -40px);
+#player-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 35px;
 }
 
-.path {
-    transform: scale(1.45);
+#player-x, #player-o, #enter-text {
+    display: flex;
+    padding: 20px;
 }
 
-.circle {
-    padding-top: 10px;
+#enter-text {
+    font-size: 40px;
 }
+
+#player-x, #player-o {
+    font-size: 30px;
+}
+
+#player-x {
+    color: #29ABF4;
+}
+
+#player-o {
+    color:  #F76BE9;
+}
+
+#player-x-name, #player-o-name {
+    font-family: 'Bungee', cursive;
+    font-size: 20px;
+    width: 53%;
+    border-radius: 3px;
+    padding: 5px 10px;
+}
+
+#player-x-name {
+    border: 3px solid #29ABF4;
+}
+
+#player-o-name {
+    border: 3px solid #F76BE9;
+}
+
+.player-buttons {
+    padding: 20px 20px 0px 20px;
+    align-self: flex-end;
+    margin-right: 40px;
+}
+
+#back-btn-1 {
+    margin-right: 20px;;
+}
+
+#back-btn-1, #submit-btn-2 {
+    font-family: 'Bungee', cursive;
+    font-size: 25px;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 3px;
+}
+
+label {
+    padding-top: 5px;
+    padding-right: 20px;
+}
+/* #close-btn {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 40px;
+    transform: rotate(45deg);
+    cursor: pointer;
+} */

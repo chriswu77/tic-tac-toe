@@ -95,6 +95,11 @@ const gameBoard = (function (){
 })();
 
 const UIController = (function () {
+    const images = {
+        cross: '<img src="images/cross.png">',
+        circle: '<img src="images/circle.png">'
+    };
+
     // use this module to control the display 
     const cellDOMs = Array.from(document.querySelectorAll('.box'));
     const playerOneDot = document.querySelector('.player-one-dot');
@@ -105,19 +110,22 @@ const UIController = (function () {
     const winnerOne = document.getElementById('winner-1');
     const winnerTwo = document.getElementById('winner-2');
 
-    const setLetterStyle = function (letter, cell) {
-        if (letter === 'X') {
-            cell.classList.add('player-1-color');
-        } else if (letter === 'O') {
-            cell.classList.add('player-2-color');
-        }
-    };
+    // const setLetterStyle = function (letter, cell) {
+    //     if (letter === 'X') {
+    //         cell.classList.add('player-1-color');
+    //     } else if (letter === 'O') {
+    //         cell.classList.add('player-2-color');
+    //     }
+    // };
 
     // public functions
     const renderMove = board => {
         for (let i = 0; i < cellDOMs.length; i++) {
-            cellDOMs[i].textContent = board[i];
-            setLetterStyle(board[i], cellDOMs[i]);
+            if (board[i] === 'X') {
+                cellDOMs[i].innerHTML = images.cross;
+            } else if (board[i] === 'O') {
+                cellDOMs[i].innerHTML = images.circle;
+            }
         }
     };
 
@@ -150,7 +158,8 @@ const UIController = (function () {
 
     const clearBoard = () => {
         cellDOMs.forEach(cell => {
-            cell.textContent = '';
+            // cell.textContent = '';
+            cell.innerHTML = '';
             cell.classList.remove('highlight');
             cell.classList.remove('player-1-color');
             cell.classList.remove('player-2-color');
@@ -169,9 +178,9 @@ const UIController = (function () {
 
     const setWinner = letter => {
         if (letter === 'X') {
-            winnerOne.textContent = 'WINNER';
+            winnerOne.textContent = 'WINNER!';
         } else {
-            winnerTwo.textContent = 'WINNER';
+            winnerTwo.textContent = 'WINNER!';
         }
     };
 
