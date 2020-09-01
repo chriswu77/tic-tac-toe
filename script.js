@@ -109,6 +109,9 @@ const UIController = (function () {
     const drawText = document.getElementById('draw-text');
     const winnerOne = document.getElementById('winner-1');
     const winnerTwo = document.getElementById('winner-2');
+    const modal = document.querySelector('.modal');
+    const displayNames = Array.from(document.querySelectorAll('.player-text, .player-name'));
+    const modalContent = document.querySelector('.modal-content');
 
     // const setLetterStyle = function (letter, cell) {
     //     if (letter === 'X') {
@@ -150,9 +153,10 @@ const UIController = (function () {
         }
     };
 
-    const highlightWin = winningCombo => {
+    const highlightWin = (winningCombo, letter) => {
+        letter = letter.toLowerCase();
         winningCombo.forEach(index => {
-            document.getElementById(`box${index}`).classList.add('highlight');
+            document.getElementById(`box${index}`).classList.add(`highlight-${letter}`);
         });
     };
 
@@ -160,7 +164,8 @@ const UIController = (function () {
         cellDOMs.forEach(cell => {
             // cell.textContent = '';
             cell.innerHTML = '';
-            cell.classList.remove('highlight');
+            cell.classList.remove('highlight-x');
+            cell.classList.remove('highlight-o');
             cell.classList.remove('player-1-color');
             cell.classList.remove('player-2-color');
         });
@@ -190,6 +195,20 @@ const UIController = (function () {
         firstPlayerDot();
     };
 
+    const hideModal = () => {
+        modal.style.visibility = 'hidden';
+    };
+
+    const showNames = () => {
+        console.log(displayNames);
+        displayNames.forEach(cur => cur.style.visibility = 'visible');
+    }
+
+    const showPlayerForm = () => {
+        const formHTML = "<form id='player-form'><p id='enter-text'>Enter Player Names</p><div id='player-x'><label>Player X</label><input id='player-x-name' type='text' required></div><div id='player-o'><label>Player O</label><input id='player-o-name' type='text' required></div><div class='player-buttons'><button type='button' id='back-btn-1'>Back</button><input type='submit' id='submit-btn-2' value='Submit'></div></form>";
+        modalContent.innerHTML = formHTML;
+    };
+
     return {
         renderMove,
         setPlayerNames,
@@ -200,7 +219,10 @@ const UIController = (function () {
         showDraw,
         hideDraw,
         setWinner,
-        resetPlayers
+        resetPlayers,
+        hideModal,
+        showNames,
+        showPlayerForm
     }
 })();
 
@@ -208,13 +230,26 @@ const gameController = (function () {
     // use this module to control the flow of the game, Global app controller
     let gamePlaying;
     let clickCount;
+    let mode;
     let playerX;
     let playerO;
 
     const setupEventListeners = () => {
         document.addEventListener('click', clickCell);
-        document.querySelector('#player-form').addEventListener('submit', assignPlayer);
+        // document.querySelector('#player-form').addEventListener('submit', assignPlayer);
         document.getElementById('restart-btn').addEventListener('click', restart);
+        Array.from(document.querySelectorAll('#vs-player-btn, #vs-computer-btn')).forEach(cur => cur.addEventListener('click', selectMode));
+    };
+
+    const selectMode = e => {
+        const btn = e.target.id;
+        if (btn === 'vs-player-btn') {
+            mode = 'player';
+        } else if (btn === 'vs-computer-btn') {
+            mode = 'computer';
+        }
+        UIController.showPlayerForm();
+        // console.log(mode);
     };
 
     const restart = () => {
@@ -253,7 +288,7 @@ const gameController = (function () {
             // set winner name and keep dot on winner
             UIController.setWinner(player.letter);
             // highlight board UI for winning combo
-            UIController.highlightWin(win.winningIndex);
+            UIController.highlightWin(win.winningIndex, player.letter);
         } else if (draw) {
             gamePlaying = false;
             UIController.showDraw();
@@ -298,6 +333,8 @@ const gameController = (function () {
             playerO = gameBoard.addPlayer(playerOName, 'O');
             UIController.setPlayerNames(playerX, playerO);
             document.querySelector('#player-form').reset();
+            UIController.hideModal();
+            UIController.showNames();
         }
     };
 

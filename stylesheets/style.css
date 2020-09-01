@@ -1,8 +1,8 @@
 body {
     position: relative;
-    background-image: url(../images/brickwall_rc.jpg);
-    background-repeat: repeat-y;
-    background-size: 100% 100%;
+    background-image: url(../images/brickwall.jpg);
+    /* background-repeat: repeat-y;
+    background-size: 100% 100%; */
 }
 
 #main-container {
@@ -84,6 +84,7 @@ h1 {
 
 .player-text, .player-name {
     margin-bottom: 15px;
+    visibility: hidden;
 }
 
 #player-card-1 {
@@ -116,8 +117,14 @@ h1 {
     color: #F76BE9;
 }
 
-.highlight {
-    background-color: greenyellow;
+.highlight-x {
+    background-color: #1591D7;
+    opacity: 1;
+}
+
+.highlight-o {
+    background-color: #9348A6;
+    opacity: 1;
 }
 
 #player-1-status, #player-2-status {
@@ -245,11 +252,37 @@ label {
     padding-top: 5px;
     padding-right: 20px;
 }
-/* #close-btn {
-    position: absolute;
-    top: 0;
-    right: 10px;
+
+.select-mode-modal {
+    display: block;
+}
+
+#select-header {
+    font-size: 50px;
+    text-align: center;
+}
+
+#select-text {
     font-size: 40px;
-    transform: rotate(45deg);
-    cursor: pointer;
-} */
+    padding: 30px 0;
+    text-align: center;
+}
+
+.mode-buttons {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#vs-player-btn, #vs-computer-btn {
+    font-family: 'Bungee', cursive;
+    font-size: 25px;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 3px;
+}
+
+#vs-player-btn {
+margin-right: 50px;
+}
