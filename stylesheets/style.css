@@ -169,9 +169,10 @@ img {
     display:flex;
     justify-content: center;
     align-items: center;
-    /* visibility: hidden;
-    opacity: 0;
-    transition: all 0.2s ease-in; */
+}
+
+.fade-in {
+    animation: fadeIn ease 0.5s;
 }
 
 .modal-content {
@@ -198,8 +199,12 @@ img {
     padding: 20px;
 }
 
-#enter-text {
+#enter-text, #enter-text-2 {
     font-size: 40px;
+}
+
+#enter-text-2 {
+    padding-bottom: 10px;
 }
 
 #player-x, #player-o {
@@ -222,6 +227,15 @@ img {
     padding: 5px 10px;
 }
 
+#single-name {
+    font-family: 'Bungee', cursive;
+    font-size: 20px;
+    border-radius: 3px;
+    padding: 5px 10px;
+    border: 3px solid #29ABF4;
+    width: 93%;
+}
+
 #player-x-name {
     border: 3px solid #29ABF4;
 }
@@ -236,11 +250,17 @@ img {
     margin-right: 40px;
 }
 
-#back-btn-1 {
-    margin-right: 20px;;
+.page-btns {
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
 }
 
-#back-btn-1, #submit-btn-2 {
+#back-btn-1, #back-btn-2 {
+    margin-right: 20px;
+}
+
+#back-btn-1, #submit-btn-1, #back-btn-2, #submit-btn-2 {
     font-family: 'Bungee', cursive;
     font-size: 25px;
     padding: 5px;
@@ -284,5 +304,14 @@ label {
 }
 
 #vs-player-btn {
-margin-right: 50px;
+    margin-right: 50px;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

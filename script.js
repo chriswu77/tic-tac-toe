@@ -84,20 +84,32 @@ const gameBoard = (function (){
         board = ['', '', '', '', '', '', '', '', ''];
     };
 
+    const findEmptyCell = () => {
+        const randomCellIndex = Math.floor(Math.random() * 9);
+        if (checkIfEmpty(randomCellIndex)) {
+            return randomCellIndex;
+        } else {
+            return findEmptyCell();
+        }
+    };
+
     return {
         addPlayer,
         insertInBoard,
         insertInData,
         checkIfEmpty,
         getBoard,
-        clearBoard
+        clearBoard,
+        findEmptyCell
     }
 })();
 
 const UIController = (function () {
     const images = {
         cross: '<img src="images/cross.png">',
-        circle: '<img src="images/circle.png">'
+        circle: '<img src="images/circle.png">',
+        filledCross: '<img src="images/filled_cross.png">',
+        filledCircle: '<img src="images/filled_circle.png">'
     };
 
     // use this module to control the display 
@@ -154,10 +166,15 @@ const UIController = (function () {
     };
 
     const highlightWin = (winningCombo, letter) => {
-        letter = letter.toLowerCase();
+        // letter = letter.toLowerCase();
+        // winningCombo.forEach(index => {
+        //     document.getElementById(`box${index}`).classList.add(`highlight-${letter}`);
+        // });
+        let img;
+        letter === 'X' ? img = images.filledCross : img = images.filledCircle;
         winningCombo.forEach(index => {
-            document.getElementById(`box${index}`).classList.add(`highlight-${letter}`);
-        });
+            document.getElementById(`box${index}`).innerHTML = img;
+        })
     };
 
     const clearBoard = () => {
@@ -205,8 +222,21 @@ const UIController = (function () {
     }
 
     const showPlayerForm = () => {
-        const formHTML = "<form id='player-form'><p id='enter-text'>Enter Player Names</p><div id='player-x'><label>Player X</label><input id='player-x-name' type='text' required></div><div id='player-o'><label>Player O</label><input id='player-o-name' type='text' required></div><div class='player-buttons'><button type='button' id='back-btn-1'>Back</button><input type='submit' id='submit-btn-2' value='Submit'></div></form>";
+        const formHTML = "<form id='player-form'><p id='enter-text'>Enter Player Names</p><div id='player-x'><label>Player X</label><input id='player-x-name' type='text' required></div><div id='player-o'><label>Player O</label><input id='player-o-name' type='text' required></div><div class='player-buttons'><button type='button' id='back-btn-1'>Back</button><input type='submit' id='submit-btn-1' value='Submit'></div></form>";
         modalContent.innerHTML = formHTML;
+        modal.classList.toggle('fade-in');
+    };
+
+    const showSingleForm = () => {
+        const formHTML = "<form id='single-player-form'><p id='enter-text-2'>Enter Your Name</p><input id='single-name' type='text' required><div class='page-btns'><button type='button' id='back-btn-2'>Back</button><input type='submit' id='submit-btn-2' value='Submit'></div></form>";
+        modalContent.innerHTML = formHTML;
+        modal.classList.toggle('fade-in');
+    }
+
+    const backToModePage = () => {
+        const modeHTML = "<div class='select-mode-modal'><p id='select-header'>Welcome to Tic Tae Toe</p><p id='select-text'>Choose your game type</p><div class='mode-buttons'><button type='button' id='vs-player-btn'>vs player</button><button type='button' id='vs-computer-btn'>vs computer</button></div></div>";
+        modalContent.innerHTML = modeHTML;
+        modal.classList.toggle('fade-in');
     };
 
     return {
@@ -222,7 +252,9 @@ const UIController = (function () {
         resetPlayers,
         hideModal,
         showNames,
-        showPlayerForm
+        showPlayerForm,
+        showSingleForm,
+        backToModePage
     }
 })();
 
@@ -245,11 +277,20 @@ const gameController = (function () {
         const btn = e.target.id;
         if (btn === 'vs-player-btn') {
             mode = 'player';
+            UIController.showPlayerForm();
+            document.querySelector('#player-form').addEventListener('submit', assignPlayer);
+            document.querySelector('#back-btn-1').addEventListener('click', goToPrevPage);
         } else if (btn === 'vs-computer-btn') {
             mode = 'computer';
+            UIController.showSingleForm();
+            document.querySelector('#single-player-form').addEventListener('submit', assignPlayer);
+            document.querySelector('#back-btn-2').addEventListener('click', goToPrevPage);
         }
-        UIController.showPlayerForm();
-        // console.log(mode);
+    };
+
+    const goToPrevPage = () => {
+        UIController.backToModePage();
+        Array.from(document.querySelectorAll('#vs-player-btn, #vs-computer-btn')).forEach(cur => cur.addEventListener('click', selectMode));
     };
 
     const restart = () => {
@@ -288,6 +329,7 @@ const gameController = (function () {
             // set winner name and keep dot on winner
             UIController.setWinner(player.letter);
             // highlight board UI for winning combo
+            // UIController.highlightWin(win.winningIndex, player.letter);
             UIController.highlightWin(win.winningIndex, player.letter);
         } else if (draw) {
             gamePlaying = false;
@@ -304,19 +346,33 @@ const gameController = (function () {
                 if (cellIndex >= 0 && cellIndex <= 8) {
                     const isEmpty = gameBoard.checkIfEmpty(cellIndex);
                     if (isEmpty) {
-                        let player;
-                        clickCount++;
-                        console.log(cellIndex);
-                        console.log(clickCount);
-                        if (clickCount % 2 === 1) {
-                            // Player X's turn
-                            player = playerX;
-                        } else if (clickCount % 2 === 0) {
-                            // Player O's turn
-                            player = playerO;
+                        if (mode === 'player') {
+                            let player;
+                            clickCount++;
+                            console.log(cellIndex);
+                            console.log(clickCount);
+                            if (clickCount % 2 === 1) {
+                                // Player X's turn
+                                player = playerX;
+                            } else if (clickCount % 2 === 0) {
+                                // Player O's turn
+                                player = playerO;
+                            }
+                            pushData(player, cellIndex);
+                            gameOver(player);
+                        } else if (mode === 'computer') {
+                            // no need for click counter
+                            // do players move first
+                            pushData(playerX, cellIndex);
+                            gameOver(playerX);
+                            // do computers move right after. find an empty cell from gameboard
+                            if (gamePlaying) {
+                                const emptyIndex = gameBoard.findEmptyCell();
+                                console.log(emptyIndex);
+                                pushData(playerO, emptyIndex);
+                                gameOver(playerO);
+                            }
                         }
-                        pushData(player, cellIndex);
-                        gameOver(player);
                     }
                 }
             }
@@ -327,15 +383,27 @@ const gameController = (function () {
         e.preventDefault();
         gamePlaying = true;
         if (gamePlaying) {
-            const playerXName = document.querySelector('#player-x-name').value;
-            const playerOName = document.querySelector('#player-o-name').value;
-            playerX = gameBoard.addPlayer(playerXName, 'X');
-            playerO = gameBoard.addPlayer(playerOName, 'O');
-            UIController.setPlayerNames(playerX, playerO);
-            document.querySelector('#player-form').reset();
-            UIController.hideModal();
-            UIController.showNames();
+            if (mode === 'player') {
+                const playerXName = document.querySelector('#player-x-name').value;
+                const playerOName = document.querySelector('#player-o-name').value;
+                playerX = gameBoard.addPlayer(playerXName, 'X');
+                playerO = gameBoard.addPlayer(playerOName, 'O');
+                document.querySelector('#player-form').reset();
+                prepareUI();
+            } else if (mode === 'computer') {
+                const firstPlayerX = document.querySelector('#single-name').value;
+                playerX = gameBoard.addPlayer(firstPlayerX, 'X');
+                playerO = gameBoard.addPlayer('Computer', 'O');
+                document.querySelector('#single-player-form').reset();
+                prepareUI();
+            }
         }
+    };
+
+    const prepareUI = () => {
+        UIController.setPlayerNames(playerX, playerO);
+        UIController.hideModal();
+        UIController.showNames();
     };
 
     return {
