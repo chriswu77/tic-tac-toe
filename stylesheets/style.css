@@ -204,6 +204,7 @@ img {
 #single-name {
     font-family: 'Bungee', cursive;
     font-size: 20px;
+    line-height: 30px;
     border-radius: 3px;
     padding: 5px 10px;
     border: 3px solid #29ABF4;
