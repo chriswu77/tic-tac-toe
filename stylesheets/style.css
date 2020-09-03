@@ -96,6 +96,7 @@ h1 {
     font-family: 'Bungee', cursive;
     position: absolute;
     font-size: 35px;
+    line-height: 52.5px;
     padding: 10px;
     border-radius: 5px;
     background-color: #E8F83A;
@@ -194,6 +195,7 @@ img {
 #player-x-name, #player-o-name {
     font-family: 'Bungee', cursive;
     font-size: 20px;
+    line-height: 30px;
     width: 53%;
     border-radius: 3px;
     padding: 5px 10px;
@@ -236,6 +238,7 @@ img {
 #back-btn-1, #submit-btn-1, #back-btn-2, #submit-btn-2 {
     font-family: 'Bungee', cursive;
     font-size: 25px;
+    line-height: 37.5px;
     padding: 5px;
     border: 2px solid black;
     border-radius: 3px;
@@ -247,7 +250,7 @@ img {
 }
 
 label {
-    padding-top: 5px;
+    padding-top: 8px;
     padding-right: 20px;
 }
 
@@ -277,6 +280,7 @@ label {
 #vs-player-btn, #vs-computer-btn {
     font-family: 'Bungee', cursive;
     font-size: 25px;
+    line-height: 37.5px;
     padding: 5px;
     border: 2px solid black;
     border-radius: 3px;
