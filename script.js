@@ -1,6 +1,6 @@
 const gameBoard = (function (){
     let board = ['', '', '', '', '', '', '', '', ''];
-
+    
     const Player = (name, letter) => {
         return {
             name,
@@ -49,6 +49,97 @@ const gameBoard = (function (){
         [0, 4, 8], [2, 4, 6]
     ];
 
+    // AI MINIMAX FUNCTIONS
+    const ai = 'O';
+    const human = 'X';
+
+    const FindBestMove = () => {
+        let bestScore = Infinity;
+        let bestMove;
+        for (let i = 0; i < 9; i++) {
+            // is the spot available/empty?
+            if (board[i] === '') {
+                board[i] = ai;
+                let score = minimax(board, 0, true); // next move would be human/maximizer
+                board[i] = '';
+                if (score < bestScore) {
+                    bestScore = score;
+                    bestMove = i;
+                }
+            }
+        }
+        return bestMove;
+    };
+
+    const threeInARow = () => {
+        for (let i = 0; i < winConditions.length; i++) {
+            const winX = winConditions[i].every(index => board[index] === 'X');
+            const winO = winConditions[i].every(index => board[index] === 'O');
+            if (winX) {
+                return 'X';
+            } else if (winO) {
+                return 'O';
+            }
+        }
+        return false;
+    };
+
+    const checkTie = () => {
+        const win = threeInARow();
+        const boardFull = isBoardFilled();
+        if (!win && boardFull) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    const minimax = (gameBoard, depth, isMaximizing) => {
+        scores = {
+            'X': 100,
+            'O': -100,
+            'tie': 0
+        };
+        
+        // check for terminal/win
+        const winner = threeInARow();
+        const draw = checkTie();
+
+        if (winner === 'X') {
+            return scores[winner] - depth;
+        } else if (winner === 'O') {
+            return scores[winner] + depth;
+        } else if (draw) {
+            return scores['tie'];
+        }
+
+        if (isMaximizing) {
+            let bestScore = -Infinity;
+            for (let i = 0; i < 9; i++) {
+                //find empty cell
+                if (gameBoard[i] === '') {
+                    gameBoard[i] = human;
+                    score = minimax(gameBoard, depth + 1, false);
+                    gameBoard[i] = '';
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+            return bestScore;
+        } else {
+            let bestScore = Infinity;
+            for (let i = 0; i < 9; i++) {
+                //find empty cell
+                if (gameBoard[i] === '') {
+                    gameBoard[i] = ai;
+                    score = minimax(gameBoard, depth - 1, true);
+                    gameBoard[i] = '';
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
+    };
+    
     // public functions 
     const addPlayer = (name, letter) => {
         const player = Player(name, letter);
@@ -95,7 +186,8 @@ const gameBoard = (function (){
         checkIfEmpty,
         getBoard,
         clearBoard,
-        findEmptyCell
+        findEmptyCell,
+        FindBestMove
     }
 })();
 
@@ -205,7 +297,7 @@ const UIController = (function () {
     }
 
     const backToModePage = () => {
-        const modeHTML = "<div class='select-mode-modal'><p id='select-header'>Welcome to Tic Tae Toe</p><p id='select-text'>Choose your game type</p><div class='mode-buttons'><button type='button' id='vs-player-btn'>vs player</button><button type='button' id='vs-computer-btn'>vs computer</button></div></div>";
+        const modeHTML = "<div class='select-mode-modal'><p id='select-header'>Welcome to Tic-Tac-Toe</p><p id='select-text'>Choose your game type</p><div class='mode-buttons'><button type='button' id='vs-player-btn'>vs player</button><button type='button' id='vs-easy-btn'>vs Easy AI</button><button type='button' id='vs-hard-btn'>vs Hard AI</button></div></div>";
         modalContent.innerHTML = modeHTML;
         modal.classList.toggle('fade-in');
     };
@@ -239,7 +331,7 @@ const gameController = (function () {
     const setupEventListeners = () => {
         document.addEventListener('click', clickCell);
         document.getElementById('restart-btn').addEventListener('click', restart);
-        Array.from(document.querySelectorAll('#vs-player-btn, #vs-computer-btn')).forEach(cur => cur.addEventListener('click', selectMode));
+        Array.from(document.querySelectorAll('#vs-player-btn, #vs-easy-btn, #vs-hard-btn')).forEach(cur => cur.addEventListener('click', selectMode));
     };
 
     const selectMode = e => {
@@ -249,8 +341,8 @@ const gameController = (function () {
             UIController.showPlayerForm();
             document.querySelector('#player-form').addEventListener('submit', assignPlayer);
             document.querySelector('#back-btn-1').addEventListener('click', goToPrevPage);
-        } else if (btn === 'vs-computer-btn') {
-            mode = 'computer';
+        } else if (btn === 'vs-easy-btn' || btn === 'vs-hard-btn') {
+            btn === 'vs-easy-btn' ? mode = 'easyAI' : mode = 'hardAI';
             UIController.showSingleForm();
             document.querySelector('#single-player-form').addEventListener('submit', assignPlayer);
             document.querySelector('#back-btn-2').addEventListener('click', goToPrevPage);
@@ -259,7 +351,7 @@ const gameController = (function () {
 
     const goToPrevPage = () => {
         UIController.backToModePage();
-        Array.from(document.querySelectorAll('#vs-player-btn, #vs-computer-btn')).forEach(cur => cur.addEventListener('click', selectMode));
+        Array.from(document.querySelectorAll('#vs-player-btn, #vs-easy-btn, #vs-hard-btn')).forEach(cur => cur.addEventListener('click', selectMode));
     };
 
     const restart = () => {
@@ -282,6 +374,7 @@ const gameController = (function () {
     const gameOver = player => {
         const win = player.checkIfWin();
         const draw = player.checkIfDraw();
+
         if (win.decision) {
             gamePlaying = false;
             UIController.setWinner(player.letter);
@@ -311,14 +404,19 @@ const gameController = (function () {
                             }
                             pushData(player, cellIndex);
                             gameOver(player);
-                        } else if (mode === 'computer') {
+                        } else if (mode === 'easyAI' || mode === 'hardAI') {
                             // do players move first
                             pushData(playerX, cellIndex);
                             gameOver(playerX);
                             // do computers move right after. find an empty cell from gameboard
                             if (gamePlaying) {
-                                const emptyIndex = gameBoard.findEmptyCell();
-                                pushData(playerO, emptyIndex);
+                                let moveIndex;
+                                if (mode === 'easyAI') {
+                                    moveIndex = gameBoard.findEmptyCell();
+                                } else {
+                                    moveIndex = gameBoard.FindBestMove();
+                                }
+                                pushData(playerO, moveIndex);
                                 gameOver(playerO);
                             }
                         }
@@ -339,7 +437,7 @@ const gameController = (function () {
                 playerO = gameBoard.addPlayer(playerOName, 'O');
                 document.querySelector('#player-form').reset();
                 prepareUI();
-            } else if (mode === 'computer') {
+            } else if (mode === 'easyAI' || mode === 'hardAI') {
                 const firstPlayerX = document.querySelector('#single-name').value;
                 playerX = gameBoard.addPlayer(firstPlayerX, 'X');
                 playerO = gameBoard.addPlayer('Computer', 'O');

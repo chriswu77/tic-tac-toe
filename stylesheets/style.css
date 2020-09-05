@@ -287,7 +287,7 @@ label {
     transform: translateX(-50%);
 }
 
-#vs-player-btn, #vs-computer-btn {
+#vs-player-btn, #vs-easy-btn, #vs-hard-btn {
     font-family: 'Bungee', cursive;
     font-size: 25px;
     line-height: 37.5px;
@@ -297,8 +297,8 @@ label {
     color: #2d2d2d;
 }
 
-#vs-player-btn {
-    margin-right: 50px;
+#vs-easy-btn {
+    margin: 0 50px;
 }
 
 #restart-btn:focus, #vs-player-btn:focus, #vs-computer-btn:focus, #back-btn-1:focus, #submit-btn-1:focus, #back-btn-2:focus, #submit-btn-2:focus {
