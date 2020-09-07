@@ -327,6 +327,8 @@ const gameController = (function () {
     let mode;
     let playerX;
     let playerO;
+    let overFlag = false;
+    let allowRestart = true;
 
     const setupEventListeners = () => {
         document.addEventListener('click', clickCell);
@@ -355,14 +357,17 @@ const gameController = (function () {
     };
 
     const restart = () => {
-        gameBoard.clearBoard();
-        playerX.clearTurns();
-        playerO.clearTurns();
-        clickCount = 0;
-        gamePlaying = true;
-        UIController.clearBoard();
-        UIController.resetPlayers();
-        UIController.hideDraw();
+        if (allowRestart) {
+            gameBoard.clearBoard();
+            playerX.clearTurns();
+            playerO.clearTurns();
+            clickCount = 0;
+            gamePlaying = true;
+            overFlag = false;
+            UIController.clearBoard();
+            UIController.resetPlayers();
+            UIController.hideDraw();
+        }
     };
 
     const pushData = (player, cellIndex) => {
@@ -377,10 +382,12 @@ const gameController = (function () {
 
         if (win.decision) {
             gamePlaying = false;
+            overFlag = true;
             UIController.setWinner(player.letter);
             UIController.highlightWin(win.winningIndex, player.letter);
         } else if (draw) {
             gamePlaying = false;
+            overFlag = true;
             UIController.showDraw();
         } else {
             UIController.toggleDot(player.letter);
@@ -416,8 +423,14 @@ const gameController = (function () {
                                 } else {
                                     moveIndex = gameBoard.FindBestMove();
                                 }
-                                pushData(playerO, moveIndex);
-                                gameOver(playerO);
+                                gamePlaying = false; // freeze game until the timeout finishes running
+                                allowRestart = false;
+                                setTimeout(() => {
+                                    pushData(playerO, moveIndex);
+                                    gameOver(playerO);
+                                    if (!overFlag) gamePlaying = true;
+                                    allowRestart = true;
+                                }, 1000);
                             }
                         }
                     }
