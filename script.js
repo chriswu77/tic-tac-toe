@@ -430,7 +430,7 @@ const gameController = (function () {
                                     gameOver(playerO);
                                     if (!overFlag) gamePlaying = true;
                                     allowRestart = true;
-                                }, 1000);
+                                }, 200);
                             }
                         }
                     }
