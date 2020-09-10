@@ -301,7 +301,7 @@ label {
     margin: 0 50px;
 }
 
-#restart-btn:focus, #vs-player-btn:focus, #vs-computer-btn:focus, #back-btn-1:focus, #submit-btn-1:focus, #back-btn-2:focus, #submit-btn-2:focus {
+#restart-btn:focus, #vs-player-btn:focus, #vs-easy-btn:focus, #vs-hard-btn:focus, #back-btn-1:focus, #submit-btn-1:focus, #back-btn-2:focus, #submit-btn-2:focus {
     outline: none;
 }
 
