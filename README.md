@@ -6,4 +6,4 @@ Project built with factory functions instead of constructors. Uses the Module Pa
 
 Used the minimax algorithm for the Hard AI mode.
 
-Live link: https://huskyharris.github.io/tic-tac-toe/
+Live link: https://chriswu77.github.io/tic-tac-toe/
